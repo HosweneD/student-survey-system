@@ -44,6 +44,10 @@ def update_survey(db: Session, survey_id: int, survey_data: SurveyUpdate):
 def delete_survey(db: Session, survey_id: int):
     survey = get_survey(db, survey_id)
     if survey:
+        db.query(Vote).filter(Vote.survey_id == survey_id).delete()
+
+        db.query(Participation).filter(Participation.survey_id == survey_id).delete()
+
         db.delete(survey)
         db.commit()
         return True
